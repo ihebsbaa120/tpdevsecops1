@@ -67,9 +67,10 @@ jobs:
         run: docker build -t democyber:latest .
 
       - name: Scan Docker Image with trivy
-        uses: aquasecurity/trivy-action@0.76.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: democyber:latest
-          format: 'table'
+          format: 'json'
+          output: 'trivy-report.json'
           exit-code: '1'
           severity: 'CRITICAL,HIGH'

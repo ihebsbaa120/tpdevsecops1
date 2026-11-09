@@ -11,7 +11,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/democyber:latest
+      DOCKER_IMAGE_NAME: ${{ secrets.iheb1203 }}/democyber:latest
     steps:
       # Checkout the code
       - name: Checkout repository
@@ -31,3 +31,7 @@ jobs:
       # Build Maven
       - name: Build Java project with Maven
         run: mvn clean package
+
+      # Gitleaks scan (before compilation)
+      - name: Run Gitleaks scan
+        uses: zricethezav/gitleaks-action@v2

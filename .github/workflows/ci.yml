@@ -15,7 +15,9 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history, needed by Gitleaks and Sonar
 
       # Install Java
       - name: Set up jdk 21
@@ -34,7 +36,9 @@ jobs:
 
       # Gitleaks scan (before compilation)
       - name: Run Gitleaks scan
-        uses: zricethezav/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Upload the Gitleaks report
       - name: Upload Gitleaks report
@@ -88,10 +92,11 @@ jobs:
 
       # Run SonarCloud scan
       - name: SonarCloud scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           projectBaseDir: .
           args: >
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
